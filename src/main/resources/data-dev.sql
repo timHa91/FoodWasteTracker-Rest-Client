@@ -1,0 +1,3 @@
+--DELETE FROM food_item;
+--INSERT INTO food_item (name, quantity, expiration_date) VALUES ('Apple', 10, '2023-12-31');
+--INSERT INTO food_item (name, quantity, expiration_date) VALUES ('Banana', 20, '2023-12-30');

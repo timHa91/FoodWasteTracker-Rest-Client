@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -18,14 +17,14 @@ public class FoodWasteRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recordId;
-    private Instant wasteDate;
-    private Long quantity;
+    private LocalDate wasteDate;
+    private Double quantity;
     @Enumerated(EnumType.STRING)
     private Unit unit;
     @Enumerated(EnumType.STRING)
     private WasteReason reason;
     private String location;
-    private Instant createdAt;
+    private LocalDate createdAt;
     @OneToOne
     FoodItem foodItem;
     @ManyToOne

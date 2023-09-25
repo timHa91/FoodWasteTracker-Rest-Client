@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -23,10 +22,10 @@ public class FoodItem {
     private String productName;
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
-    private Instant expirationDate;
-    private Instant createdAt;
-    private Instant updatedAt;
-    private Long quantity;
+    private LocalDate expirationDate;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
+    private Double quantity;
     @Enumerated(EnumType.STRING)
     private Unit unit;
     private String brand;
