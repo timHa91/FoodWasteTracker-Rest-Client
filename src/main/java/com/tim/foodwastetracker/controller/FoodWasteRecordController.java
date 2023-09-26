@@ -6,12 +6,11 @@ import com.tim.foodwastetracker.service.FoodWasteRecordService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,7 +29,7 @@ public class FoodWasteRecordController {
     }
 
     @ApiOperation(value = "Get a Food Waste Record by its ID")
-    @GetMapping("/{recordId}")
+    @GetMapping("{recordId}")
     public ResponseEntity<FoodWasteRecordResponse> getRecordById(@PathVariable Long recordId) {
         log.info("Received request to get Food Waste Record with ID: {}", recordId);
         return ResponseEntity.ok(foodWasteRecordService.getRecordById(recordId));
@@ -41,9 +40,6 @@ public class FoodWasteRecordController {
     public ResponseEntity<FoodWasteRecordResponse> createRecord(@RequestBody @Valid FoodWasteRecordRequest request) {
         log.info("Received request to create a new Food Waste Record for Food Item ID: {}", request.foodItemId());
         FoodWasteRecordResponse response = foodWasteRecordService.createRecord(request);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{recordId}")
-                .buildAndExpand(response.recordId()).toUri();
-        return ResponseEntity.created(location).body(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 }

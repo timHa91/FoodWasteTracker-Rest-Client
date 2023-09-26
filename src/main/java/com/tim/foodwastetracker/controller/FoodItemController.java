@@ -2,23 +2,21 @@ package com.tim.foodwastetracker.controller;
 
 import com.tim.foodwastetracker.dto.FoodItemRequest;
 import com.tim.foodwastetracker.dto.FoodItemResponse;
-import com.tim.foodwastetracker.dto.FoodWasteRecordResponse;
 import com.tim.foodwastetracker.service.FoodItemService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @AllArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("api/v1/food-item")
+@RequestMapping("api/v1/food-items")
 public class FoodItemController {
 
     private final FoodItemService foodItemService;
@@ -31,7 +29,7 @@ public class FoodItemController {
     }
 
     @ApiOperation(value = "Get a Food Item by its ID")
-    @GetMapping("/{foodId}")
+    @GetMapping("{foodId}")
     public ResponseEntity<FoodItemResponse> getFoodItemById(Long foodId) {
         log.info("Received request to get Food Item with ID: {}", foodId);
         return ResponseEntity.ok(foodItemService.getFoodItemById(foodId));
@@ -42,9 +40,7 @@ public class FoodItemController {
     public ResponseEntity<FoodItemResponse> createFoodItem(@RequestBody @Valid FoodItemRequest request) {
         log.info("Received request to create a new Food Item with Name: {}", request.productName());
         FoodItemResponse response = foodItemService.createFoodItem(request);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{foodId}")
-                .buildAndExpand(response.foodId()).toUri();
-        return ResponseEntity.created(location).body(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 

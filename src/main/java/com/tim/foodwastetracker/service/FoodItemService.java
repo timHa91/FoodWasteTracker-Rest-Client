@@ -2,10 +2,8 @@ package com.tim.foodwastetracker.service;
 
 import com.tim.foodwastetracker.dto.FoodItemRequest;
 import com.tim.foodwastetracker.dto.FoodItemResponse;
-import com.tim.foodwastetracker.dto.FoodWasteRecordRequest;
 import com.tim.foodwastetracker.exception.FoodItemNotFoundException;
 import com.tim.foodwastetracker.model.FoodItem;
-import com.tim.foodwastetracker.model.FoodWasteRecord;
 import com.tim.foodwastetracker.repository.FoodItemRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
