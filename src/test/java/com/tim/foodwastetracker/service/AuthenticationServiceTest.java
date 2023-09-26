@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
 
+    @InjectMocks
     private AuthenticationService underTest;
     @Mock
     private  UserRepository userRepository;
@@ -43,15 +45,6 @@ class AuthenticationServiceTest {
     @Mock
     private  AuthenticationManager authenticationManager;
 
-    @BeforeEach
-    void setUp() {
-        underTest = new AuthenticationService(
-                userRepository,
-                passwordEncoder,
-                jwtService,
-                authenticationManager);
-    }
-
     @Test
     void canRegisterNewUser() {
         RegisterRequest request = new RegisterRequest(
@@ -59,7 +52,7 @@ class AuthenticationServiceTest {
                 "testLast",
                 "test@test.com",
                 "thnbefT!mb3.1");
-        // Tell the passwordEncoder mock to return a specific encoded password when its encode method is called
+
         String encodedPassword = "encodedPassword";
         when(passwordEncoder.encode(request.password())).thenReturn(encodedPassword);
 
@@ -77,7 +70,6 @@ class AuthenticationServiceTest {
 
     @Test
     void canUserAuthenticate() {
-        // Arrange
         String email = "test@test.com";
         String password = "thnbefT!mb3.1";
         User user = new User(
@@ -103,7 +95,6 @@ class AuthenticationServiceTest {
 
     @Test
     void canGetCurrentUser() {
-        // Arrange
         String email = "test@test.com";
         User user = new User(
                 1L,
@@ -125,16 +116,13 @@ class AuthenticationServiceTest {
 
         SecurityContextHolder.setContext(securityContext);
 
-        // Act
         User result = underTest.getCurrentUser();
 
-        // Assert
         assertEquals(user, result);
     }
 
     @Test
     void getCurrentUserThrowsWhenUserNotFound() {
-        // Arrange
         String email = "test@test.com";
 
         Authentication authentication = mock(Authentication.class);
@@ -145,38 +133,32 @@ class AuthenticationServiceTest {
 
         SecurityContextHolder.setContext(securityContext);
 
-        // Act & Assert
         assertThrows(UserNotFoundException.class, () -> underTest.getCurrentUser());
     }
 
     @Test
     void registerThrowsWhenPasswordIsInvalid() {
-        // Arrange
         RegisterRequest request = new RegisterRequest(
                 "testFirst",
                 "testLast",
                 "test@test.com",
                 "invalidPassword");
 
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> underTest.register(request));
     }
 
     @Test
     void authenticateThrowsWhenUserNotFound() {
-        // Arrange
         String email = "test@test.com";
         String password = "thnbefT!mb3.1";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(UserNotFoundException.class, () -> underTest.authenticate(new AuthenticationRequest(email, password)));
     }
 
     @Test
     void authenticateThrowsWhenUserNotActive() {
-        // Arrange
         String email = "test@test.com";
         String password = "thnbefT!mb3.1";
         User user = new User(
@@ -192,7 +174,6 @@ class AuthenticationServiceTest {
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-        // Act & Assert
         assertThrows(UserNotActiveException.class, () -> underTest.authenticate(new AuthenticationRequest(email, password)));
     }
 }
