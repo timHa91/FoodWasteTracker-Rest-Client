@@ -1,3 +1,5 @@
+com/tim/foodwastetracker/FoodWasteTrackerApplicationTests.class
 com/tim/foodwastetracker/service/FoodWasteRecordServiceTest.class
+com/tim/foodwastetracker/repository/UserRepositoryTest.class
 com/tim/foodwastetracker/service/AuthenticationServiceTest.class
 com/tim/foodwastetracker/service/FoodItemServiceTest.class

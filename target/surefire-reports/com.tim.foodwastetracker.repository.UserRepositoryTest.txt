@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.tim.foodwastetracker.repository.UserRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.103 s - in com.tim.foodwastetracker.repository.UserRepositoryTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.129 s - in com.tim.foodwastetracker.repository.UserRepositoryTest

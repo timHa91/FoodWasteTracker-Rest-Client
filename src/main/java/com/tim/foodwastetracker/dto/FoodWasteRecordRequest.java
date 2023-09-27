@@ -2,6 +2,7 @@ package com.tim.foodwastetracker.dto;
 
 import com.tim.foodwastetracker.model.Unit;
 import com.tim.foodwastetracker.model.WasteReason;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;

@@ -10,6 +10,7 @@ import com.tim.foodwastetracker.model.User;
 import com.tim.foodwastetracker.repository.FoodItemRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,7 +35,7 @@ class FoodItemServiceTest {
     private FoodItemService underTest;
 
     @Test
-    void getAllFoodItems() {
+    void canGetAllFoodItems() {
         FoodItem foodItem1 = new FoodItem();
         FoodItem foodItem2 = new FoodItem();
         List<FoodItem> foodItems = Arrays.asList(foodItem1, foodItem2);
@@ -47,7 +48,7 @@ class FoodItemServiceTest {
     }
 
     @Test
-    void getFoodItemById() {
+    void canGetFoodItemById() {
         Long id = 1L;
         FoodItem foodItem = new FoodItem();
         foodItem.setFoodId(id);
@@ -69,7 +70,8 @@ class FoodItemServiceTest {
     }
 
     @Test
-    void createFoodItem() {
+    void canCreateFoodItem() {
+        // Arrange
         FoodItemRequest request = new FoodItemRequest(
                 "productName",
                 FoodCategory.FRUITS,
@@ -84,7 +86,16 @@ class FoodItemServiceTest {
         FoodItem foodItem = new FoodItem();
         when(foodItemRepository.save(any(FoodItem.class))).thenReturn(foodItem);
 
+        // Act
         FoodItemResponse result = underTest.createFoodItem(request);
+
+        // Assert
+        ArgumentCaptor<FoodItem> foodItemArgumentCaptor = ArgumentCaptor.forClass(FoodItem.class);
+        verify(foodItemRepository).save(foodItemArgumentCaptor.capture());
+        FoodItem capturedFoodItem = foodItemArgumentCaptor.getValue();
+
+        assertEquals(request.productName(), capturedFoodItem.getProductName());
+        // Add more assertions for the other properties of the FoodItem object
 
         assertEquals(foodItem.getProductName(), result.productName());
     }

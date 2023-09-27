@@ -1,5 +1,6 @@
 package com.tim.foodwastetracker.service;
 
+import com.tim.foodwastetracker.config.SecurityConfig;
 import com.tim.foodwastetracker.dto.AuthenticationRequest;
 import com.tim.foodwastetracker.dto.AuthenticationResponse;
 import com.tim.foodwastetracker.dto.RegisterRequest;
@@ -44,6 +45,8 @@ class AuthenticationServiceTest {
     private  JwtService jwtService;
     @Mock
     private  AuthenticationManager authenticationManager;
+    @Mock
+    private SecurityConfig securityConfig;
 
     @Test
     void canRegisterNewUser() {
