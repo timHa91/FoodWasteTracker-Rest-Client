@@ -71,32 +71,38 @@ class FoodItemServiceTest {
 
     @Test
     void canCreateFoodItem() {
-        // Arrange
+        Long foodId = 1L;
+        LocalDate expirationDate = LocalDate.now();
         FoodItemRequest request = new FoodItemRequest(
                 "productName",
                 FoodCategory.FRUITS,
-                LocalDate.now(),
+                expirationDate,
                 1.0,
                 Unit.KILOGRAM,
                 "brand");
 
         User user = new User();
         when(authenticationService.getCurrentUser()).thenReturn(user);
-
         FoodItem foodItem = new FoodItem();
+        foodItem.setFoodId(foodId);
+        foodItem.setExpirationDate(expirationDate);
         when(foodItemRepository.save(any(FoodItem.class))).thenReturn(foodItem);
 
-        // Act
         FoodItemResponse result = underTest.createFoodItem(request);
 
-        // Assert
         ArgumentCaptor<FoodItem> foodItemArgumentCaptor = ArgumentCaptor.forClass(FoodItem.class);
         verify(foodItemRepository).save(foodItemArgumentCaptor.capture());
         FoodItem capturedFoodItem = foodItemArgumentCaptor.getValue();
 
         assertEquals(request.productName(), capturedFoodItem.getProductName());
-        // Add more assertions for the other properties of the FoodItem object
+        assertEquals(request.foodCategory(), capturedFoodItem.getFoodCategory());
+        assertEquals(request.brand(), capturedFoodItem.getBrand());
+        assertEquals(request.quantity(), capturedFoodItem.getQuantity());
+        assertEquals(request.unit(), capturedFoodItem.getUnit());
+        assertEquals(request.expirationDate(), capturedFoodItem.getExpirationDate());
 
-        assertEquals(foodItem.getProductName(), result.productName());
+
+        assertEquals(result.foodId(), foodId);
+        assertEquals(result.expirationDate(), request.expirationDate());
     }
 }

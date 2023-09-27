@@ -9,6 +9,7 @@ import com.tim.foodwastetracker.repository.FoodItemRepository;
 import com.tim.foodwastetracker.repository.FoodWasteRecordRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -77,13 +78,23 @@ class FoodWasteRecordServiceTest {
         FoodItem foodItem = new FoodItem();
         foodItem.setFoodId(foodItemId);
         when(foodItemRepository.findById(foodItemId)).thenReturn(Optional.of(foodItem));
-
         FoodWasteRecord foodWasteRecord = new FoodWasteRecord();
         foodWasteRecord.setFoodItem(foodItem);
-
         when(foodWasteRecordRepository.save(any(FoodWasteRecord.class))).thenReturn(foodWasteRecord);
 
         FoodWasteRecordResponse result = underTest.createRecord(request);
+
+        ArgumentCaptor<FoodWasteRecord> foodWasteRecordArgumentCaptor = ArgumentCaptor.forClass(FoodWasteRecord.class);
+        verify(foodWasteRecordRepository).save(foodWasteRecordArgumentCaptor.capture());
+        FoodWasteRecord capturedRecordItem = foodWasteRecordArgumentCaptor.getValue();
+
+        assertEquals(request.foodItemId(), capturedRecordItem.getFoodItem().getFoodId());
+        assertEquals(request.quantity(), capturedRecordItem.getQuantity());
+        assertEquals(request.unit(), capturedRecordItem.getUnit());
+        assertEquals(request.wasteDate(), capturedRecordItem.getWasteDate());
+        assertEquals(request.location(), capturedRecordItem.getLocation());
+        assertEquals(request.reason(), capturedRecordItem.getReason());
+
 
         assertEquals(foodItemId, result.foodItem().getFoodId());
     }

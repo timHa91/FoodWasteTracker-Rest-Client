@@ -10,7 +10,6 @@ import com.tim.foodwastetracker.jwt.JwtService;
 import com.tim.foodwastetracker.model.User;
 import com.tim.foodwastetracker.model.UserRole;
 import com.tim.foodwastetracker.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -26,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,18 +56,24 @@ class AuthenticationServiceTest {
 
         String encodedPassword = "encodedPassword";
         when(passwordEncoder.encode(request.password())).thenReturn(encodedPassword);
-
-        underTest.register(request);
+        when(jwtService.generateToken(any(User.class))).thenReturn("token");
+        AuthenticationResponse result = underTest.register(request);
 
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userArgumentCaptor.capture());
         User capturedUser = userArgumentCaptor.getValue();
 
-        assertThat(capturedUser.getFirstname()).isEqualTo(request.firstname());
-        assertThat(capturedUser.getLastname()).isEqualTo(request.lastname());
-        assertThat(capturedUser.getEmail()).isEqualTo(request.email());
-        assertThat(capturedUser.getPassword()).isEqualTo(encodedPassword);
+
+        assertEquals(capturedUser.getFirstname(), request.firstname());
+        assertEquals(capturedUser.getLastname(), request.lastname());
+        assertEquals(capturedUser.getEmail(), request.email());
+        assertEquals(capturedUser.getPassword(), encodedPassword);
+
+        // Verify the token in the response
+        String expectedToken = jwtService.generateToken(capturedUser);
+        assertEquals(expectedToken, result.token());
     }
+
 
     @Test
     void canUserAuthenticate() {
@@ -92,8 +96,8 @@ class AuthenticationServiceTest {
 
         AuthenticationResponse response = underTest.authenticate(new AuthenticationRequest(email, password));
 
-        assertThat(response.email()).isEqualTo(email);
-        assertThat(response.token()).isEqualTo("token");
+        assertEquals(response.email(), (email));
+        assertEquals(response.token(), "token");
     }
 
     @Test
