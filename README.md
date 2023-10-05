@@ -2,7 +2,7 @@
 
 ## Projektübersicht
 
-Dieses Projekt ist ein REST-Client, der Teil des Food Waste Tracker-Systems ist. Der Food Waste Tracker hilft Benutzern dabei, Lebensmittelverschwendung zu reduzieren, indem sie ihren Lebensmittelverbrauch und die Haltbarkeit von Lebensmitteln verfolgen können.
+Dieses Projekt ist ein Spring Boot REST-Client, der Teil des Food Waste Tracker-Systems ist. Der Food Waste Tracker hilft Benutzern dabei, Lebensmittelverschwendung zu reduzieren, indem sie ihren Lebensmittelverbrauch und die Haltbarkeit von Lebensmitteln verfolgen können.
 
 ## Funktionalitäten
 
